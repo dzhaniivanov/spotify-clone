@@ -14,18 +14,18 @@ export async function POST() {
       data: { user }
     } = await supabase.auth.getUser();
 
-    if (!user) throw new Error("Could not get user");
+    if (!user) throw  Error("Could not get user");
 
     const customer = await createOrRetrieveCustomer({
       uuid: user.id || "",
-      email: user?.email || ""
+      email: user.email || ""
     });
 
     if (!customer) throw new Error("Could not get customer");
 
     const { url } = await stripe.billingPortal.sessions.create({
       customer,
-      return_url: `${getURL}/account`
+      return_url: `${getURL()}/account`
     });
 
     return NextResponse.json({ url });
